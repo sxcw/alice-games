@@ -4,7 +4,7 @@ function assert (actual, expected) {
   }
 }
 
-console.log("Delete this console log!")
+// console.log("Delete this console log!")
 
 //
 // Exercise #1: Abstraction
@@ -18,44 +18,52 @@ console.log("Delete this console log!")
 
 console.log("[Exercise #1]")
 
-//
-// Finds all games by alice that were won by 50 points or more.
-//
+
+//Finds all games by alice that were won by 50 points or more.
+
 function findDominatingAliceGameScores () {
   // First find alice
-  var alice = null
+  var alice = Data.getPlayer('Alice');
 
-  for (var i=0; i < Data.players.length; i++) {
-    if ( Data.players[i].name === 'Alice' ) {
-      alice = Data.players[i]
-      break;
-    }
-  }
+  // for (var i=0; i < Data.players.length; i++) {
+  //   if ( Data.players[i].name === 'Alice' ) {
+  //     alice = Data.players[i]
+  //     break;
+  //   }
+  // }
 
   // Next, find all games where alice won
-  var aliceGames = []
+  var aliceGames = Data.games.filter(function(game){
+    return game.player1_id === alice.id && game.player1_score === 100
+      || game.player2_id === alice.id && game.player2_score === 100;
+  });
 
-  for (var i=0; i < Data.games.length; i++) {
-    var game = Data.games[i]
-    if (
-         game.player1_id === alice.id && game.player1_score === 100
-      || game.player2_id === alice.id && game.player2_score === 100
-    ) {
-      aliceGames.push(game)
-    }
-  }
+  // for (var i=0; i < Data.games.length; i++) {
+  //   var game = Data.games[i]
+  //   if (
+  //        game.player1_id === alice.id && game.player1_score === 100
+  //     || game.player2_id === alice.id && game.player2_score === 100
+  //   ) {
+  //     aliceGames.push(game)
+  //   }
+  // }
 
   // Next, filter for dominating games and add differences
-  var dominating = []
+  var dominating = aliceGames.filter(function(game){
+    return Math.abs(game.player1_score - game.player2_score) >= 50;
+  }).map(function(game){
+    return Math.abs(game.player1_score - game.player2_score);
+  });
 
-  for (var i=0; i < aliceGames.length; i++) {
-    var game = aliceGames[i]
-    var difference = Math.abs(game.player1_score - game.player2_score)
-    if ( difference >= 50 ) {
-      dominating.push( difference )
-    }
-  }
-
+  // console.log(JSON.stringify(aliceGames));
+  // for (var i=0; i < aliceGames.length; i++) {
+  //   var game = aliceGames[i]
+  //   var difference = Math.abs(game.player1_score - game.player2_score)
+  //   if ( difference >= 50 ) {
+  //     dominating.push( difference )
+  //   }
+  // }
+  // console.log(dominating);
   return dominating.sort()
 }
 
@@ -82,8 +90,20 @@ console.log("All good!");
 //
 
 function findDominatingAliceGameScores2 () {
-  // TODO: Copy/paste the code you wrote in Exercise #1
-  //   OR: Copy/paste the solution code for Exercise #1
+  var alice = Data.getPlayer('Alice');
+
+  var aliceGames = Data.games.filter(function(game){
+    return game.player1_id === alice.id && game.player1_score === 100
+      || game.player2_id === alice.id && game.player2_score === 100;
+  });
+
+  var dominating = aliceGames.filter(function(game){
+    return Math.abs(game.player1_score - game.player2_score) >= 50;
+  }).map(function(game){
+    return Math.abs(game.player1_score - game.player2_score);
+  });
+
+  return dominating.sort()
 }
 
 function hasName (name) {

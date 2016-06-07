@@ -69,3 +69,19 @@ Data.games = [
   { id: 89, player1_id: 12, player2_id: 13, player1_score: 20,  player2_score: 100 },
   { id: 90, player1_id: 10, player2_id: 11, player1_score: 100, player2_score: 3   },
 ];
+
+Data.getPlayer = function(val){
+  return Data.players.filter(function(player){
+    if(typeof val === 'number') {
+      if(player.id === val) {
+        return true;
+      }
+    } else if (typeof val === 'string') {
+      if(player.name === val){
+        return true;
+      }
+    } else{
+      return false;
+    }
+  })[0];
+}

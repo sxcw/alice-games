@@ -90,20 +90,30 @@ console.log("All good!");
 //
 
 function findDominatingAliceGameScores2 () {
-  var alice = Data.getPlayer('Alice');
+  var alice = Data.players.find(hasName('Alice'));
+  console.log(alice);  //{id: 10, name: "Alice"}
 
-  var aliceGames = Data.games.filter(function(game){
-    return game.player1_id === alice.id && game.player1_score === 100
-      || game.player2_id === alice.id && game.player2_score === 100;
-  });
+  var aliceGames = Data.games.filter(isWinningGameFor(alice.id));
+  console.log(aliceGames);
 
-  var dominating = aliceGames.filter(function(game){
-    return Math.abs(game.player1_score - game.player2_score) >= 50;
-  }).map(function(game){
-    return Math.abs(game.player1_score - game.player2_score);
-  });
+  var dominating = aliceGames.filter(greaterThanOrEqualTo(50)).map(toPlayerScoreDifference).sort();
+  console.log(dominating);
 
-  return dominating.sort()
+
+  // var alice = Data.getPlayer('Alice');
+
+  // var aliceGames = Data.games.filter(function(game){
+  //   return game.player1_id === alice.id && game.player1_score === 100
+  //     || game.player2_id === alice.id && game.player2_score === 100;
+  // });
+
+  // var dominating = aliceGames.filter(function(game){
+  //   return Math.abs(game.player1_score - game.player2_score) >= 50;
+  // }).map(function(game){
+  //   return Math.abs(game.player1_score - game.player2_score);
+  // });
+
+  // return dominating.sort()
 }
 
 function hasName (name) {
@@ -125,6 +135,9 @@ function toPlayerScoreDifference (game) {
 
 function greaterThanOrEqualTo (amount) {
   // TODO: Implement this function, curry-style.
+  return function(game) {
+    return toPlayerScoreDifference(game) >= amount;
+  }
 }
 
 console.log("[Exercise #2]")

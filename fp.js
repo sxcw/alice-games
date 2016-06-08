@@ -118,7 +118,7 @@ function findDominatingAliceGameScores2 () {
 
 function hasName (name) {
   return function (person) {
-    return person.name === 'Alice';
+    return person.name === name;
   };
 }
 
@@ -176,6 +176,37 @@ Array.prototype.any = function (matchFn) {
 function clanStats (clanName) {
   // TODO: Implement this function.
   //       See if you can re-use a function or two from the previous exercise :)
+  //
+  var result  = {};
+  result.clanId = getClanId(clanName);
+  result.winCount = 0;
+  result.strongWinCount = 0;
+
+  Data.games.forEach(function(game){
+    if(isMemberOfClan(result.clanId)(game.player1_id)!== isMemberOfClan(result.clanId)(game.player2_id)){
+      if(game.player1_score === 100){
+        if(isMemberOfClan(result.clanId)(game.player1_id)){
+          result.winCount++;
+          if(greaterThanOrEqualTo(35)(game)){
+            result.strongWinCount++;
+          }
+        }
+      } else {
+        if(isMemberOfClan(result.clanId)(game.player2_id)){
+          result.winCount++;
+          if(greaterThanOrEqualTo(35)(game)){
+            result.strongWinCount++;
+          }
+        }
+      }
+
+    }
+  })
+
+
+
+  return result;
+
 }
 
 // Helper function
@@ -187,6 +218,11 @@ function isMemberOfClan (clanId) {
   }
 }
 
+function getClanId(clanName) {
+  return Data.clans.find(hasName(clanName)).id; // { id: 20, name: 'Iron Rockstars' } -->20
+}
+
+console.log(isMemberOfClan(20)(11))
 console.log("[Exercise #3]");
 
 var testRun3 = clanStats('Iron Rockstars');
